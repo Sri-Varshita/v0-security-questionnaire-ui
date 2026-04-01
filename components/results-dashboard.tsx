@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { CheckCircle2, AlertCircle, FileText, ChevronDown, ChevronUp, TrendingUp, ShieldCheck, AlertTriangle } from "lucide-react"
+import { CheckCircle2, AlertCircle, FileText, TrendingUp, ShieldCheck, AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface QuestionResult {
@@ -101,7 +101,6 @@ interface ResultsDashboardProps {
 }
 
 export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
-  const [expandedId, setExpandedId] = useState<string | null>(null)
   const [filter, setFilter] = useState<"all" | "auto-answered" | "needs-review">("all")
 
   if (!showResults) {
@@ -136,6 +135,12 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
   }
 
   const getConfidenceBg = (confidence: number) => {
+    if (confidence >= 80) return "bg-primary/20 border-primary/30"
+    if (confidence >= 60) return "bg-chart-4/20 border-chart-4/30"
+    return "bg-destructive/20 border-destructive/30"
+  }
+
+  const getConfidenceBarBg = (confidence: number) => {
     if (confidence >= 80) return "bg-primary"
     if (confidence >= 60) return "bg-chart-4"
     return "bg-destructive"
@@ -145,7 +150,7 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
     <div className="space-y-6">
       {/* Stats Overview */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-card p-4 rounded-lg">
+        <div className="glass-card p-4 rounded-xl">
           <div className="flex items-center gap-2 text-muted-foreground mb-1">
             <FileText className="h-4 w-4" />
             <span className="text-xs font-mono">Total Questions</span>
@@ -153,7 +158,7 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
           <p className="text-2xl font-bold text-foreground">{stats.total}</p>
         </div>
         
-        <div className="glass-card p-4 rounded-lg">
+        <div className="glass-card p-4 rounded-xl">
           <div className="flex items-center gap-2 text-primary mb-1">
             <ShieldCheck className="h-4 w-4" />
             <span className="text-xs font-mono">Auto-Answered</span>
@@ -161,7 +166,7 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
           <p className="text-2xl font-bold text-primary">{stats.autoAnswered}</p>
         </div>
         
-        <div className="glass-card p-4 rounded-lg">
+        <div className="glass-card p-4 rounded-xl">
           <div className="flex items-center gap-2 text-chart-4 mb-1">
             <AlertTriangle className="h-4 w-4" />
             <span className="text-xs font-mono">Needs Review</span>
@@ -169,7 +174,7 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
           <p className="text-2xl font-bold text-chart-4">{stats.needsReview}</p>
         </div>
         
-        <div className="glass-card p-4 rounded-lg">
+        <div className="glass-card p-4 rounded-xl">
           <div className="flex items-center gap-2 text-muted-foreground mb-1">
             <TrendingUp className="h-4 w-4" />
             <span className="text-xs font-mono">Avg Confidence</span>
@@ -203,93 +208,78 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
         ))}
       </div>
 
-      {/* Results List */}
-      <div className="space-y-3">
+      {/* Results Cards - Stacked Vertically */}
+      <div className="flex flex-col gap-4">
         {filteredResults.map((result, index) => (
           <div
             key={result.id}
             className={cn(
-              "glass-card rounded-lg overflow-hidden transition-all duration-300",
-              "animate-in fade-in slide-in-from-bottom-2",
-              "hover:border-primary/30"
+              "group relative rounded-2xl overflow-hidden transition-all duration-300",
+              "bg-card/40 backdrop-blur-xl border border-border/40",
+              "shadow-lg shadow-black/5",
+              "hover:shadow-xl hover:shadow-primary/5",
+              "hover:border-primary/20",
+              "hover:-translate-y-1",
+              "animate-in fade-in zoom-in-95"
             )}
-            style={{ animationDelay: `${index * 50}ms` }}
+            style={{ animationDelay: `${index * 60}ms`, animationFillMode: "backwards" }}
           >
-            <button
-              onClick={() => setExpandedId(expandedId === result.id ? null : result.id)}
-              className="w-full p-4 flex items-start gap-4 text-left"
-            >
-              <div className="flex-shrink-0 mt-1">
-                {result.status === "auto-answered" ? (
-                  <div className="p-1.5 rounded-full bg-primary/20">
-                    <CheckCircle2 className="h-4 w-4 text-primary" />
-                  </div>
-                ) : (
-                  <div className="p-1.5 rounded-full bg-chart-4/20">
-                    <AlertCircle className="h-4 w-4 text-chart-4" />
-                  </div>
-                )}
-              </div>
-              
-              <div className="flex-1 min-w-0">
-                <div className="flex items-start justify-between gap-4 mb-2">
-                  <p className="text-sm font-medium text-foreground leading-relaxed">
-                    {result.question}
-                  </p>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <span className={cn(
-                      "text-xs font-mono px-2 py-0.5 rounded",
-                      result.status === "auto-answered"
-                        ? "bg-primary/20 text-primary"
-                        : "bg-chart-4/20 text-chart-4"
-                    )}>
-                      {result.status === "auto-answered" ? "Auto-Answered" : "Needs Review"}
-                    </span>
-                    {expandedId === result.id ? (
-                      <ChevronUp className="h-4 w-4 text-muted-foreground" />
-                    ) : (
-                      <ChevronDown className="h-4 w-4 text-muted-foreground" />
-                    )}
-                  </div>
+            {/* Subtle glow effect on hover */}
+            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
+            
+            <div className="relative p-6">
+              {/* Header: Status Badge + Confidence */}
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  {result.status === "auto-answered" ? (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/15 border border-primary/25">
+                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                      <span className="text-xs font-medium text-primary">Auto-Answered</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-chart-4/15 border border-chart-4/25">
+                      <AlertCircle className="h-3.5 w-3.5 text-chart-4" />
+                      <span className="text-xs font-medium text-chart-4">Needs Review</span>
+                    </div>
+                  )}
                 </div>
                 
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Confidence:</span>
-                    <div className="w-24 h-1.5 bg-muted/50 rounded-full overflow-hidden">
-                      <div
-                        className={cn("h-full rounded-full transition-all", getConfidenceBg(result.confidence))}
-                        style={{ width: `${result.confidence}%` }}
-                      />
-                    </div>
-                    <span className={cn("text-xs font-mono", getConfidenceColor(result.confidence))}>
-                      {result.confidence}%
-                    </span>
+                {/* Confidence Score */}
+                <div className={cn(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-full border",
+                  getConfidenceBg(result.confidence)
+                )}>
+                  <div className="w-12 h-1.5 bg-muted/30 rounded-full overflow-hidden">
+                    <div
+                      className={cn("h-full rounded-full transition-all duration-500", getConfidenceBarBg(result.confidence))}
+                      style={{ width: `${result.confidence}%` }}
+                    />
                   </div>
+                  <span className={cn("text-sm font-mono font-semibold", getConfidenceColor(result.confidence))}>
+                    {result.confidence}%
+                  </span>
                 </div>
               </div>
-            </button>
-            
-            {expandedId === result.id && (
-              <div className="px-4 pb-4 pt-0 border-t border-border/30 animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="pt-4 space-y-4">
-                  <div>
-                    <label className="text-xs font-mono text-muted-foreground uppercase tracking-wider">
-                      AI-Generated Answer
-                    </label>
-                    <p className="mt-2 text-sm text-foreground leading-relaxed bg-muted/20 rounded-lg p-3 border border-border/30">
-                      {result.answer}
-                    </p>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-primary" />
-                    <span className="text-xs text-muted-foreground">Source:</span>
-                    <span className="text-xs font-mono text-primary">{result.source}</span>
-                  </div>
-                </div>
+
+              {/* Question */}
+              <h3 className="text-base font-semibold text-foreground leading-relaxed mb-4">
+                {result.question}
+              </h3>
+
+              {/* Answer */}
+              <div className="mb-4">
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {result.answer}
+                </p>
               </div>
-            )}
+
+              {/* Source Document */}
+              <div className="flex items-center gap-2 pt-4 border-t border-border/30">
+                <FileText className="h-4 w-4 text-primary/70" />
+                <span className="text-xs text-muted-foreground">Source:</span>
+                <span className="text-xs font-mono text-primary">{result.source}</span>
+              </div>
+            </div>
           </div>
         ))}
       </div>
