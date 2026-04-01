@@ -2,15 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { Settings, Brain, AlertCircle, CheckCircle2 } from "lucide-react"
+import type { AppSettings, DetailLevel } from "../lib/app-types"
 import { cn } from "@/lib/utils"
-
-type DetailLevel = "low" | "medium" | "high"
-
-interface AppSettings {
-  confidenceThreshold: number
-  detailLevel: DetailLevel
-  autoCite: boolean
-}
 
 interface SettingsPanelProps {
   settings: AppSettings
@@ -65,7 +58,7 @@ export function SettingsPanel({ settings, onSettingsChange }: SettingsPanelProps
     setHasChanges(false)
   }
 
-  const detailOptions: DetailLevel[] = ["low", "medium", "high"]
+  const detailOptions: DetailLevel[] = ["brief", "standard", "detailed"]
 
   return (
     <div className="space-y-6">

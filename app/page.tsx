@@ -11,6 +11,7 @@ import { SettingsPanel } from "@/components/settings-panel"
 import { StepProgress } from "@/components/step-progress"
 import { AIInsightsPanel } from "@/components/ai-insights-panel"
 import { MatrixBackground } from "@/components/matrix-background"
+import type { AppSettings, SectionKey, StepKey } from "../lib/app-types"
 import { cn } from "@/lib/utils"
 
 // Type definitions
@@ -21,14 +22,6 @@ interface QuestionResult {
   confidence: number
   source: string
   status: "auto-answered" | "needs-review"
-}
-
-type DetailLevel = "low" | "medium" | "high"
-
-interface AppSettings {
-  confidenceThreshold: number
-  detailLevel: DetailLevel
-  autoCite: boolean
 }
 
 // Mock questions for generating results
@@ -71,11 +64,11 @@ const generateMockResults = (): QuestionResult[] => {
 }
 
 export default function SecurityQuestionnaireAgent() {
-  const [activeSection, setActiveSection] = useState("upload")
+  const [activeSection, setActiveSection] = useState<SectionKey>("upload")
   const [isProcessing, setIsProcessing] = useState(false)
   const [showResults, setShowResults] = useState(false)
-  const [currentStep, setCurrentStep] = useState<"upload" | "processing" | "results">("upload")
-  const uploadRef = useRef<HTMLElement | null>(null)
+  const [currentStep, setCurrentStep] = useState<StepKey>("upload")
+  const uploadRef = useRef<HTMLDivElement | null>(null)
 
   // File management state
   const [questionnaireFile, setQuestionnaireFile] = useState<File | null>(null)
@@ -87,7 +80,7 @@ export default function SecurityQuestionnaireAgent() {
   // Settings state
   const [settings, setSettings] = useState<AppSettings>({
     confidenceThreshold: 80,
-    detailLevel: "medium",
+    detailLevel: "standard",
     autoCite: true,
   })
 
@@ -169,15 +162,27 @@ export default function SecurityQuestionnaireAgent() {
   }, [])
 
   const handleSectionChange = useCallback(
-    (section: "upload" | "processing" | "results") => {
+    (section: SectionKey) => {
       setActiveSection(section)
-      setCurrentStep(section)
+      setCurrentStep(section === "settings" ? "results" : section)
       if (section === "results") {
         setShowResults(results.length > 0)
       } else {
         setShowResults(false)
       }
       if (section === "upload") {
+        uploadRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
+      }
+    },
+    [results]
+  )
+
+  const handleStepChange = useCallback(
+    (step: StepKey) => {
+      setCurrentStep(step)
+      setActiveSection(step === "results" ? "results" : "upload")
+      setShowResults(step === "results" && results.length > 0)
+      if (step === "upload") {
         uploadRef.current?.scrollIntoView({ behavior: "smooth", block: "start" })
       }
     },
@@ -202,7 +207,7 @@ export default function SecurityQuestionnaireAgent() {
         
           {/* Step Progress Indicator */}
           <div className="border-b border-border/30 bg-card/20 backdrop-blur-sm">
-            <StepProgress currentStep={currentStep} onStepChange={handleSectionChange} />
+            <StepProgress currentStep={currentStep} onStepChange={handleStepChange} />
           </div>
 
           <div className="p-8 max-w-5xl mx-auto relative">

@@ -1,9 +1,8 @@
 "use client"
 
 import { Shield, Cpu, UserCircle } from "lucide-react"
+import type { SectionKey } from "../lib/app-types"
 import { cn } from "@/lib/utils"
-
-type SectionKey = "upload" | "results" | "settings"
 
 interface NavbarProps {
   activeSection: SectionKey

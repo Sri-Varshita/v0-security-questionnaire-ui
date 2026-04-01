@@ -1,14 +1,15 @@
 "use client"
 
 import { Upload, FileText, Settings, ChevronRight } from "lucide-react"
+import type { SectionKey } from "../lib/app-types"
 import { cn } from "@/lib/utils"
 
 interface SidebarProps {
-  activeSection: string
-  onSectionChange: (section: string) => void
+  activeSection: SectionKey
+  onSectionChange: (section: SectionKey) => void
 }
 
-const navItems = [
+const navItems: Array<{ id: SectionKey; label: string; icon: typeof Upload }> = [
   { id: "upload", label: "Upload", icon: Upload },
   { id: "results", label: "Results", icon: FileText },
   { id: "settings", label: "Settings", icon: Settings },

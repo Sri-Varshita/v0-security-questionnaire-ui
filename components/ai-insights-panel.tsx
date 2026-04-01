@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { Brain, CheckCircle2, AlertTriangle, ShieldAlert, TrendingUp } from "lucide-react"
+import type { AppSettings } from "../lib/app-types"
 import { cn } from "@/lib/utils"
 
 interface QuestionResult {
@@ -11,12 +12,6 @@ interface QuestionResult {
   confidence: number
   source: string
   status: "auto-answered" | "needs-review"
-}
-
-interface AppSettings {
-  confidenceThreshold: number
-  detailLevel: "brief" | "standard" | "detailed"
-  autoCite: boolean
 }
 
 interface AIInsightsPanelProps {

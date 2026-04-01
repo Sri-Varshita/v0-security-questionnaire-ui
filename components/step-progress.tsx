@@ -1,14 +1,15 @@
 "use client"
 
 import { Upload, Cpu, FileCheck, CheckCircle2 } from "lucide-react"
+import type { StepKey } from "../lib/app-types"
 import { cn } from "@/lib/utils"
 
 interface StepProgressProps {
-  currentStep: "upload" | "processing" | "results"
-  onStepChange: (step: "upload" | "processing" | "results") => void
+  currentStep: StepKey
+  onStepChange: (step: StepKey) => void
 }
 
-const steps = [
+const steps: Array<{ id: StepKey; label: string; icon: typeof Upload }> = [
   { id: "upload", label: "Upload", icon: Upload },
   { id: "processing", label: "Processing", icon: Cpu },
   { id: "results", label: "Results", icon: FileCheck },
