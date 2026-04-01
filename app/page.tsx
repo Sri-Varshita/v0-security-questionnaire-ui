@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react"
 import { Navbar } from "@/components/navbar"
 import { Sidebar } from "@/components/sidebar"
+import { Hero } from "@/components/hero"
 import { UploadSection } from "@/components/upload-section"
 import { ProcessingTerminal } from "@/components/processing-terminal"
 import { ResultsDashboard } from "@/components/results-dashboard"
@@ -46,6 +47,7 @@ export default function SecurityQuestionnaireAgent() {
       <Sidebar activeSection={activeSection} onSectionChange={setActiveSection} />
       
       <main className="pl-64 pt-16">
+        <Hero />
         <div className="p-8 max-w-5xl mx-auto">
           {activeSection === "upload" && (
             <div className="space-y-8 animate-in fade-in duration-500">
