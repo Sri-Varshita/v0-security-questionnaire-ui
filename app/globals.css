@@ -4,46 +4,46 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* Matrix Cyber Theme - Dark by default */
+  /* Matrix Cyber Theme - Subtle Professional Greens */
   --background: oklch(0.13 0.02 260);
   --foreground: oklch(0.95 0.01 260);
   --card: oklch(0.16 0.02 260);
   --card-foreground: oklch(0.95 0.01 260);
   --popover: oklch(0.14 0.02 260);
   --popover-foreground: oklch(0.95 0.01 260);
-  --primary: oklch(0.85 0.25 155);
+  --primary: oklch(0.72 0.19 145);
   --primary-foreground: oklch(0.13 0.02 260);
-  --secondary: oklch(0.40 0.12 155);
+  --secondary: oklch(0.42 0.12 155);
   --secondary-foreground: oklch(0.95 0.01 260);
   --muted: oklch(0.22 0.02 260);
   --muted-foreground: oklch(0.65 0.02 260);
-  --accent: oklch(0.30 0.08 155);
+  --accent: oklch(0.32 0.10 155);
   --accent-foreground: oklch(0.95 0.01 260);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.95 0.01 260);
   --border: oklch(0.28 0.03 260);
   --input: oklch(0.20 0.02 260);
-  --ring: oklch(0.85 0.25 155);
-  --chart-1: oklch(0.85 0.25 155);
-  --chart-2: oklch(0.70 0.18 155);
-  --chart-3: oklch(0.55 0.15 155);
-  --chart-4: oklch(0.75 0.20 85);
-  --chart-5: oklch(0.60 0.20 25);
+  --ring: oklch(0.72 0.19 145);
+  --chart-1: oklch(0.72 0.19 145);
+  --chart-2: oklch(0.62 0.16 150);
+  --chart-3: oklch(0.50 0.14 155);
+  --chart-4: oklch(0.75 0.18 85);
+  --chart-5: oklch(0.60 0.18 25);
   --radius: 0.5rem;
   --sidebar: oklch(0.11 0.02 260);
   --sidebar-foreground: oklch(0.95 0.01 260);
-  --sidebar-primary: oklch(0.85 0.25 155);
+  --sidebar-primary: oklch(0.72 0.19 145);
   --sidebar-primary-foreground: oklch(0.13 0.02 260);
-  --sidebar-accent: oklch(0.22 0.03 155);
+  --sidebar-accent: oklch(0.24 0.04 155);
   --sidebar-accent-foreground: oklch(0.95 0.01 260);
   --sidebar-border: oklch(0.25 0.03 260);
-  --sidebar-ring: oklch(0.85 0.25 155);
+  --sidebar-ring: oklch(0.72 0.19 145);
   
-  /* Custom Matrix Colors */
-  --matrix-green: oklch(0.85 0.25 155);
-  --matrix-green-dim: oklch(0.40 0.12 155);
+  /* Custom Matrix Colors - Subtle Professional Greens */
+  --matrix-green: oklch(0.72 0.19 145);
+  --matrix-green-dim: oklch(0.42 0.12 155);
   --matrix-dark: oklch(0.13 0.02 260);
-  --glow-green: 0 255 156;
+  --glow-green: 34 197 94;
 }
 
 .dark {
@@ -53,32 +53,32 @@
   --card-foreground: oklch(0.95 0.01 260);
   --popover: oklch(0.14 0.02 260);
   --popover-foreground: oklch(0.95 0.01 260);
-  --primary: oklch(0.85 0.25 155);
+  --primary: oklch(0.72 0.19 145);
   --primary-foreground: oklch(0.13 0.02 260);
-  --secondary: oklch(0.40 0.12 155);
+  --secondary: oklch(0.42 0.12 155);
   --secondary-foreground: oklch(0.95 0.01 260);
   --muted: oklch(0.22 0.02 260);
   --muted-foreground: oklch(0.65 0.02 260);
-  --accent: oklch(0.30 0.08 155);
+  --accent: oklch(0.32 0.10 155);
   --accent-foreground: oklch(0.95 0.01 260);
   --destructive: oklch(0.55 0.22 25);
   --destructive-foreground: oklch(0.95 0.01 260);
   --border: oklch(0.28 0.03 260);
   --input: oklch(0.20 0.02 260);
-  --ring: oklch(0.85 0.25 155);
-  --chart-1: oklch(0.85 0.25 155);
-  --chart-2: oklch(0.70 0.18 155);
-  --chart-3: oklch(0.55 0.15 155);
-  --chart-4: oklch(0.75 0.20 85);
-  --chart-5: oklch(0.60 0.20 25);
+  --ring: oklch(0.72 0.19 145);
+  --chart-1: oklch(0.72 0.19 145);
+  --chart-2: oklch(0.62 0.16 150);
+  --chart-3: oklch(0.50 0.14 155);
+  --chart-4: oklch(0.75 0.18 85);
+  --chart-5: oklch(0.60 0.18 25);
   --sidebar: oklch(0.11 0.02 260);
   --sidebar-foreground: oklch(0.95 0.01 260);
-  --sidebar-primary: oklch(0.85 0.25 155);
+  --sidebar-primary: oklch(0.72 0.19 145);
   --sidebar-primary-foreground: oklch(0.13 0.02 260);
-  --sidebar-accent: oklch(0.22 0.03 155);
+  --sidebar-accent: oklch(0.24 0.04 155);
   --sidebar-accent-foreground: oklch(0.95 0.01 260);
   --sidebar-border: oklch(0.25 0.03 260);
-  --sidebar-ring: oklch(0.85 0.25 155);
+  --sidebar-ring: oklch(0.72 0.19 145);
 }
 
 @theme inline {
@@ -137,20 +137,20 @@
 /* Glassmorphism Card */
 .glass-card {
   @apply bg-card/60 backdrop-blur-xl border border-border/50 rounded-lg;
-  box-shadow: 0 4px 30px rgba(0, 255, 156, 0.05);
+  box-shadow: 0 4px 24px rgba(34, 197, 94, 0.03);
 }
 
-/* Matrix glow effects */
+/* Subtle premium glow effects */
 .glow-green {
-  box-shadow: 0 0 20px rgba(var(--glow-green), 0.3), 0 0 40px rgba(var(--glow-green), 0.1);
+  box-shadow: 0 0 15px rgba(var(--glow-green), 0.15), 0 0 30px rgba(var(--glow-green), 0.05);
 }
 
 .glow-green-subtle {
-  box-shadow: 0 0 10px rgba(var(--glow-green), 0.15), 0 0 20px rgba(var(--glow-green), 0.05);
+  box-shadow: 0 0 8px rgba(var(--glow-green), 0.1), 0 0 16px rgba(var(--glow-green), 0.03);
 }
 
 .text-glow {
-  text-shadow: 0 0 10px rgba(var(--glow-green), 0.5), 0 0 20px rgba(var(--glow-green), 0.3);
+  text-shadow: 0 0 8px rgba(var(--glow-green), 0.3), 0 0 16px rgba(var(--glow-green), 0.15);
 }
 
 /* Scanline overlay effect */
@@ -196,32 +196,32 @@
   animation: blink 1s infinite;
 }
 
-/* Pulse glow animation */
+/* Subtle pulse glow animation */
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 10px rgba(var(--glow-green), 0.3), 0 0 20px rgba(var(--glow-green), 0.1);
+    box-shadow: 0 0 6px rgba(var(--glow-green), 0.15), 0 0 12px rgba(var(--glow-green), 0.05);
   }
   50% {
-    box-shadow: 0 0 20px rgba(var(--glow-green), 0.5), 0 0 40px rgba(var(--glow-green), 0.2);
+    box-shadow: 0 0 10px rgba(var(--glow-green), 0.25), 0 0 20px rgba(var(--glow-green), 0.08);
   }
 }
 
 .animate-pulse-glow {
-  animation: pulse-glow 2s ease-in-out infinite;
+  animation: pulse-glow 3s ease-in-out infinite;
 }
 
-/* Gradient border animation */
+/* Subtle border animation */
 @keyframes border-glow {
   0%, 100% {
-    border-color: rgba(var(--glow-green), 0.3);
+    border-color: rgba(var(--glow-green), 0.2);
   }
   50% {
-    border-color: rgba(var(--glow-green), 0.7);
+    border-color: rgba(var(--glow-green), 0.45);
   }
 }
 
 .animate-border-glow {
-  animation: border-glow 2s ease-in-out infinite;
+  animation: border-glow 2.5s ease-in-out infinite;
 }
 
 /* Terminal text animation */
@@ -230,10 +230,10 @@
   to { width: 100%; }
 }
 
-/* Matrix rain effect background */
+/* Subtle ambient background */
 .matrix-bg {
   background: 
-    radial-gradient(ellipse at 50% 0%, rgba(0, 255, 156, 0.08) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 50%, rgba(0, 255, 156, 0.05) 0%, transparent 40%),
-    radial-gradient(ellipse at 20% 80%, rgba(0, 255, 156, 0.03) 0%, transparent 40%);
+    radial-gradient(ellipse at 50% 0%, rgba(34, 197, 94, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 50%, rgba(34, 197, 94, 0.025) 0%, transparent 40%),
+    radial-gradient(ellipse at 20% 80%, rgba(34, 197, 94, 0.015) 0%, transparent 40%);
 }

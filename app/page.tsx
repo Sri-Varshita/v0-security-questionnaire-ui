@@ -84,9 +84,9 @@ export default function SecurityQuestionnaireAgent() {
         </div>
       </main>
 
-      {/* Ambient glow effects */}
-      <div className="fixed top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="fixed bottom-0 left-64 w-64 h-64 bg-primary/3 rounded-full blur-3xl pointer-events-none" />
+      {/* Subtle ambient glow effects */}
+      <div className="fixed top-0 right-0 w-96 h-96 bg-primary/[0.025] rounded-full blur-3xl pointer-events-none" />
+      <div className="fixed bottom-0 left-64 w-64 h-64 bg-primary/[0.015] rounded-full blur-3xl pointer-events-none" />
     </div>
   )
 }
