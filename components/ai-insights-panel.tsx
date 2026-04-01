@@ -4,20 +4,45 @@ import { useEffect, useState } from "react"
 import { Brain, CheckCircle2, AlertTriangle, ShieldAlert, TrendingUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 
-interface AIInsightsPanelProps {
-  totalQuestions: number
-  autoAnswered: number
-  needsReview: number
+interface QuestionResult {
+  id: string
+  question: string
+  answer: string
+  confidence: number
+  source: string
+  status: "auto-answered" | "needs-review"
 }
 
-export function AIInsightsPanel({ totalQuestions, autoAnswered, needsReview }: AIInsightsPanelProps) {
+interface AppSettings {
+  confidenceThreshold: number
+  detailLevel: "brief" | "standard" | "detailed"
+  autoCite: boolean
+}
+
+interface AIInsightsPanelProps {
+  results: QuestionResult[]
+  settings: AppSettings
+}
+
+export function AIInsightsPanel({ results, settings }: AIInsightsPanelProps) {
   const [animated, setAnimated] = useState(false)
-  const autoAnsweredPercent = Math.round((autoAnswered / totalQuestions) * 100)
 
   useEffect(() => {
     const timer = setTimeout(() => setAnimated(true), 100)
     return () => clearTimeout(timer)
   }, [])
+
+  // Compute metrics from results
+  const totalQuestions = results.length
+  const autoAnswered = results.filter((r) => r.confidence > settings.confidenceThreshold).length
+  const needsReview = results.filter((r) => r.confidence <= settings.confidenceThreshold).length
+  const autoAnsweredPercent = totalQuestions > 0 ? Math.round((autoAnswered / totalQuestions) * 100) : 0
+  const avgConfidence = totalQuestions > 0 ? Math.round(results.reduce((sum, r) => sum + r.confidence, 0) / totalQuestions) : 0
+
+  // Find questions with lowest confidence (potential risks)
+  const lowestConfidenceQuestions = results
+    .sort((a, b) => a.confidence - b.confidence)
+    .slice(0, 3)
 
   return (
     <div 
@@ -35,7 +60,7 @@ export function AIInsightsPanel({ totalQuestions, autoAnswered, needsReview }: A
         </div>
         <div>
           <h3 className="text-sm font-semibold text-foreground">AI Insights</h3>
-          <p className="text-xs text-muted-foreground">Analysis summary from AWS Bedrock</p>
+          <p className="text-xs text-muted-foreground">Real-time analysis from generated results</p>
         </div>
       </div>
 
@@ -65,28 +90,46 @@ export function AIInsightsPanel({ totalQuestions, autoAnswered, needsReview }: A
 
         {/* Needs Review */}
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-chart-4/15">
-            <AlertTriangle className="h-4 w-4 text-chart-4" />
+          <div className="p-2 rounded-lg bg-yellow-500/15">
+            <AlertTriangle className="h-4 w-4 text-yellow-500" />
           </div>
           <div>
-            <p className="text-2xl font-bold text-chart-4 tabular-nums">{needsReview}</p>
+            <p className="text-2xl font-bold text-yellow-500 tabular-nums">{needsReview}</p>
             <p className="text-xs text-muted-foreground">Needs Review</p>
           </div>
         </div>
 
-        {/* Risk Insight */}
+        {/* Avg Confidence */}
         <div className="flex items-start gap-3">
           <div className="p-2 rounded-lg bg-destructive/15">
             <ShieldAlert className="h-4 w-4 text-destructive" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-semibold text-foreground mb-0.5">Key Risk</p>
-            <p className="text-xs text-muted-foreground truncate">
-              Data encryption responses need review
-            </p>
+            <p className="text-2xl font-bold text-foreground tabular-nums">{avgConfidence}%</p>
+            <p className="text-xs text-muted-foreground">Avg Confidence</p>
           </div>
         </div>
       </div>
+
+      {/* Low Confidence Alerts */}
+      {lowestConfidenceQuestions.length > 0 && (
+        <div className="px-6 py-4 border-t border-border/30 bg-destructive/5">
+          <p className="text-xs font-semibold text-foreground mb-3">Topics Requiring Attention</p>
+          <div className="space-y-2">
+            {lowestConfidenceQuestions
+              .filter((q) => q.confidence <= settings.confidenceThreshold)
+              .map((question) => (
+                <div key={question.id} className="flex items-start gap-2 text-xs">
+                  <span className="text-destructive/60 mt-0.5">•</span>
+                  <span className="text-muted-foreground truncate">{question.question}</span>
+                  <span className="text-destructive font-semibold whitespace-nowrap ml-auto">
+                    {question.confidence}%
+                  </span>
+                </div>
+              ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

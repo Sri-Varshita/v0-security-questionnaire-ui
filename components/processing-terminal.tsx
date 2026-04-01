@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 
 interface ProcessingTerminalProps {
   isProcessing: boolean
+  filesCount: number
   onProcess: () => void
   onComplete: () => void
 }
@@ -16,9 +17,9 @@ interface LogEntry {
   delay: number
 }
 
-const terminalLogs: LogEntry[] = [
+const createTerminalLogs = (filesCount: number): LogEntry[] => [
   { text: "[SYSTEM] Initializing AI Security Agent v2.4.1", type: "system", delay: 0 },
-  { text: "Upload received...", type: "info", delay: 600 },
+  { text: `Upload received - Processing ${filesCount} file${filesCount !== 1 ? "s" : ""}...`, type: "info", delay: 600 },
   { text: "Validating document format: PDF detected", type: "info", delay: 1200 },
   { text: "Extracting questions...", type: "processing", delay: 1800 },
   { text: "Found 47 security questions in questionnaire", type: "info", delay: 2600 },
@@ -32,12 +33,14 @@ const terminalLogs: LogEntry[] = [
   { text: "[SUCCESS] Processing complete - Ready for review", type: "success", delay: 8400 },
 ]
 
-export function ProcessingTerminal({ isProcessing, onProcess, onComplete }: ProcessingTerminalProps) {
+export function ProcessingTerminal({ isProcessing, filesCount, onProcess, onComplete }: ProcessingTerminalProps) {
   const [displayedLogs, setDisplayedLogs] = useState<{ text: string; type: string; isTyping: boolean }[]>([])
   const [currentTypingIndex, setCurrentTypingIndex] = useState(-1)
   const [currentCharIndex, setCurrentCharIndex] = useState(0)
   const [showCursor, setShowCursor] = useState(true)
   const terminalRef = useRef<HTMLDivElement>(null)
+  
+  const terminalLogs = createTerminalLogs(filesCount)
 
   // Cursor blink effect
   useEffect(() => {

@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 
 interface StepProgressProps {
   currentStep: "upload" | "processing" | "results"
+  onStepChange: (step: "upload" | "processing" | "results") => void
 }
 
 const steps = [
@@ -13,7 +14,7 @@ const steps = [
   { id: "results", label: "Results", icon: FileCheck },
 ]
 
-export function StepProgress({ currentStep }: StepProgressProps) {
+export function StepProgress({ currentStep, onStepChange }: StepProgressProps) {
   const getCurrentStepIndex = () => {
     return steps.findIndex(s => s.id === currentStep)
   }
@@ -41,9 +42,11 @@ export function StepProgress({ currentStep }: StepProgressProps) {
           const isPending = index > currentIndex
 
           return (
-            <div 
+            <button
               key={step.id}
-              className="relative flex flex-col items-center z-10"
+              onClick={() => onStepChange(step.id)}
+              className="relative flex flex-col items-center z-10 focus:outline-none"
+              aria-label={`Jump to ${step.label}`}
             >
               {/* Step Circle */}
               <div
@@ -52,7 +55,8 @@ export function StepProgress({ currentStep }: StepProgressProps) {
                   "backdrop-blur-sm",
                   isCompleted && "bg-primary border-primary",
                   isCurrent && "bg-primary/20 border-primary glow-green-subtle",
-                  isPending && "bg-card border-border/50"
+                  isPending && "bg-card border-border/50",
+                  "hover:scale-105"
                 )}
               >
                 {isCompleted ? (
@@ -67,7 +71,6 @@ export function StepProgress({ currentStep }: StepProgressProps) {
                   />
                 )}
                 
-                {/* Pulse ring for current step */}
                 {isCurrent && (
                   <span className="absolute inset-0 rounded-full animate-ping bg-primary/30" style={{ animationDuration: "2s" }} />
                 )}
@@ -84,7 +87,7 @@ export function StepProgress({ currentStep }: StepProgressProps) {
               >
                 {step.label}
               </span>
-            </div>
+            </button>
           )
         })}
       </div>
