@@ -1,8 +1,59 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { CheckCircle2, AlertCircle, FileText, TrendingUp, ShieldCheck, AlertTriangle } from "lucide-react"
 import { cn } from "@/lib/utils"
+
+// Animated Confidence Bar Component
+function ConfidenceBar({ confidence, delay = 0 }: { confidence: number; delay?: number }) {
+  const [animatedValue, setAnimatedValue] = useState(0)
+  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimatedValue(confidence)
+    }, delay + 100)
+    return () => clearTimeout(timer)
+  }, [confidence, delay])
+
+  const getBarColor = (value: number) => {
+    if (value >= 80) return "bg-primary"
+    if (value >= 60) return "bg-chart-4"
+    return "bg-destructive"
+  }
+
+  const getTextColor = (value: number) => {
+    if (value >= 80) return "text-primary"
+    if (value >= 60) return "text-chart-4"
+    return "text-destructive"
+  }
+
+  const getGlowColor = (value: number) => {
+    if (value >= 80) return "shadow-primary/30"
+    if (value >= 60) return "shadow-chart-4/30"
+    return "shadow-destructive/30"
+  }
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex-1 h-2 bg-muted/40 rounded-full overflow-hidden">
+        <div
+          className={cn(
+            "h-full rounded-full transition-all duration-1000 ease-out shadow-sm",
+            getBarColor(confidence),
+            getGlowColor(confidence)
+          )}
+          style={{ width: `${animatedValue}%` }}
+        />
+      </div>
+      <span className={cn(
+        "text-sm font-mono font-bold min-w-[3rem] text-right tabular-nums",
+        getTextColor(confidence)
+      )}>
+        {animatedValue}%
+      </span>
+    </div>
+  )
+}
 
 interface QuestionResult {
   id: string
@@ -134,18 +185,6 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
     return "text-destructive"
   }
 
-  const getConfidenceBg = (confidence: number) => {
-    if (confidence >= 80) return "bg-primary/20 border-primary/30"
-    if (confidence >= 60) return "bg-chart-4/20 border-chart-4/30"
-    return "bg-destructive/20 border-destructive/30"
-  }
-
-  const getConfidenceBarBg = (confidence: number) => {
-    if (confidence >= 80) return "bg-primary"
-    if (confidence >= 60) return "bg-chart-4"
-    return "bg-destructive"
-  }
-
   return (
     <div className="space-y-6">
       {/* Stats Overview */}
@@ -244,27 +283,28 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
                   )}
                 </div>
                 
-                {/* Confidence Score */}
-                <div className={cn(
-                  "flex items-center gap-2 px-3 py-1.5 rounded-full border",
-                  getConfidenceBg(result.confidence)
-                )}>
-                  <div className="w-12 h-1.5 bg-muted/30 rounded-full overflow-hidden">
-                    <div
-                      className={cn("h-full rounded-full transition-all duration-500", getConfidenceBarBg(result.confidence))}
-                      style={{ width: `${result.confidence}%` }}
-                    />
-                  </div>
-                  <span className={cn("text-sm font-mono font-semibold", getConfidenceColor(result.confidence))}>
-                    {result.confidence}%
-                  </span>
-                </div>
               </div>
 
               {/* Question */}
-              <h3 className="text-base font-semibold text-foreground leading-relaxed mb-4">
+              <h3 className="text-base font-semibold text-foreground leading-relaxed mb-3">
                 {result.question}
               </h3>
+
+              {/* Confidence Bar */}
+              <div className="mb-4 p-3 rounded-lg bg-muted/20 border border-border/30">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Confidence Score</span>
+                  <span className={cn(
+                    "text-xs px-2 py-0.5 rounded-full",
+                    result.confidence >= 80 ? "bg-primary/15 text-primary" :
+                    result.confidence >= 60 ? "bg-chart-4/15 text-chart-4" :
+                    "bg-destructive/15 text-destructive"
+                  )}>
+                    {result.confidence >= 80 ? "High" : result.confidence >= 60 ? "Medium" : "Low"}
+                  </span>
+                </div>
+                <ConfidenceBar confidence={result.confidence} delay={index * 60} />
+              </div>
 
               {/* Answer */}
               <div className="mb-4">
