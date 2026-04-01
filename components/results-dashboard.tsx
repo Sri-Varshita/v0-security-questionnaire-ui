@@ -267,26 +267,29 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
             
             <div className="relative p-6">
-              {/* Header: Status Badge + Confidence */}
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  {result.status === "auto-answered" ? (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/15 border border-primary/25">
-                      <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-xs font-medium text-primary">Auto-Answered</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-chart-4/15 border border-chart-4/25">
-                      <AlertCircle className="h-3.5 w-3.5 text-chart-4" />
-                      <span className="text-xs font-medium text-chart-4">Needs Review</span>
-                    </div>
-                  )}
-                </div>
-                
+              {/* Status Badge - Top Right */}
+              <div className="absolute top-4 right-4">
+                {result.status === "auto-answered" ? (
+                  <div 
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/15 border border-primary/30"
+                    style={{ boxShadow: "0 0 12px rgba(34, 197, 94, 0.15)" }}
+                  >
+                    <CheckCircle2 className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-xs font-semibold text-primary">Auto-Answered</span>
+                  </div>
+                ) : (
+                  <div 
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-destructive/15 border border-destructive/30"
+                    style={{ boxShadow: "0 0 12px rgba(239, 68, 68, 0.15)" }}
+                  >
+                    <AlertCircle className="h-3.5 w-3.5 text-destructive" />
+                    <span className="text-xs font-semibold text-destructive">Needs Review</span>
+                  </div>
+                )}
               </div>
 
               {/* Question */}
-              <h3 className="text-base font-semibold text-foreground leading-relaxed mb-3">
+              <h3 className="text-base font-semibold text-foreground leading-relaxed mb-3 pr-32">
                 {result.question}
               </h3>
 
@@ -313,11 +316,22 @@ export function ResultsDashboard({ showResults }: ResultsDashboardProps) {
                 </p>
               </div>
 
-              {/* Source Document */}
+              {/* Source Document Chip */}
               <div className="flex items-center gap-2 pt-4 border-t border-border/30">
-                <FileText className="h-4 w-4 text-primary/70" />
                 <span className="text-xs text-muted-foreground">Source:</span>
-                <span className="text-xs font-mono text-primary">{result.source}</span>
+                <button 
+                  className={cn(
+                    "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full",
+                    "bg-muted/30 border border-border/40",
+                    "text-xs font-mono text-foreground",
+                    "transition-all duration-200",
+                    "hover:bg-primary/10 hover:border-primary/30 hover:text-primary",
+                    "cursor-pointer active:scale-95"
+                  )}
+                >
+                  <FileText className="h-3.5 w-3.5" />
+                  {result.source}
+                </button>
               </div>
             </div>
           </div>
